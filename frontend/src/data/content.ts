@@ -582,7 +582,7 @@ LIBRARY.dp = `<div class="library">
   </div>
   <div class="lib-grid">
     <div class="lib-card" onclick="openView('dp-consensus')">
-      <div class="lib-card-hero" style="background:linear-gradient(135deg,#0c3d2e 0%,#04231a 100%)"><span class="lib-card-tag brief">⊞ Align</span><div class="lib-hero-emblem">⊞</div></div>
+      <div class="lib-card-hero" style="background:linear-gradient(135deg,#0c3d2e 0%,#04231a 100%)"><span class="lib-card-tag brief">⊞ Align</span><img class="lib-banner" src="/banners/consensus.svg" alt=""/></div>
       <div class="lib-card-body">
         <div class="lib-card-title">Consensus Workbook</div>
         <div class="lib-card-desc">Planner overrides vs the system forecast, guardrailed ±15 / ±25. Propose, review, and stage the version for S&amp;OP.</div>
@@ -590,7 +590,7 @@ LIBRARY.dp = `<div class="library">
       </div>
     </div>
     <div class="lib-card" onclick="openView('dp-forecast')">
-      <div class="lib-card-hero" style="background:linear-gradient(135deg,#10233f 0%,#071426 100%)"><span class="lib-card-tag signal">▤ View</span><div class="lib-hero-emblem">▤</div></div>
+      <div class="lib-card-hero" style="background:linear-gradient(135deg,#10233f 0%,#071426 100%)"><span class="lib-card-tag signal">▤ View</span><img class="lib-banner" src="/banners/forecast.svg" alt=""/></div>
       <div class="lib-card-body">
         <div class="lib-card-title">Forecast Viewer</div>
         <div class="lib-card-desc">The full forecast the way a planner reads it — filter by category, channel and location, group, and search across SKUs.</div>
@@ -598,7 +598,7 @@ LIBRARY.dp = `<div class="library">
       </div>
     </div>
     <div class="lib-card" onclick="toggleAsk()">
-      <div class="lib-card-hero" style="background:linear-gradient(135deg,#0d3320 0%,#04160d 100%)"><span class="lib-card-tag ask">✦ Ask</span><div class="lib-hero-emblem">✦</div></div>
+      <div class="lib-card-hero" style="background:linear-gradient(135deg,#0d3320 0%,#04160d 100%)"><span class="lib-card-tag ask">✦ Ask</span><img class="lib-banner" src="/banners/ask.svg" alt=""/></div>
       <div class="lib-card-body">
         <div class="lib-card-title">Ask CalvinBall</div>
         <div class="lib-card-desc">SKU × depot × week questions in plain language — grounded in the same numbers, with sources and a recommended next step.</div>

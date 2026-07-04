@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 150" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Ask CalvinBall">
+  <defs>
+    <linearGradient id="askbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#122b1c"/><stop offset="1" stop-color="#05160d"/>
+    </linearGradient>
+    <radialGradient id="askglow" cx="72%" cy="45%" r="55%">
+      <stop offset="0" stop-color="#a855f7" stop-opacity=".22"/><stop offset="1" stop-color="#a855f7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="480" height="150" fill="url(#askbg)"/>
+  <rect width="480" height="150" fill="url(#askglow)"/>
+  <!-- conversation bubbles -->
+  <rect x="46" y="40" width="150" height="28" rx="14" fill="#ffffff" opacity=".08"/>
+  <g fill="#9aa0a6"><circle cx="66" cy="54" r="2.4"/><rect x="74" y="52" width="70" height="4" rx="2"/></g>
+  <rect x="82" y="82" width="128" height="28" rx="14" fill="#a855f7" fill-opacity=".18" stroke="#c084fc" stroke-opacity=".35"/>
+  <g fill="#86efac"><circle cx="106" cy="96" r="3.2"/><circle cx="120" cy="96" r="3.2"/><circle cx="134" cy="96" r="3.2"/></g>
+  <!-- big sparkle -->
+  <g transform="translate(344,75)">
+    <path d="M0 -34 C3 -12 12 -3 34 0 C12 3 3 12 0 34 C-3 12 -12 3 -34 0 C-12 -3 -3 -12 0 -34 Z" fill="#f5f5f7" opacity=".92"/>
+    <path d="M0 -34 C3 -12 12 -3 34 0 C12 3 3 12 0 34 C-3 12 -12 3 -34 0 C-12 -3 -3 -12 0 -34 Z" fill="none" stroke="#c084fc" stroke-opacity=".5" stroke-width="1"/>
+  </g>
+  <!-- small sparkles -->
+  <path d="M410 42 C411 48 414 51 420 52 C414 53 411 56 410 62 C409 56 406 53 400 52 C406 51 409 48 410 42 Z" fill="#c084fc" opacity=".8"/>
+  <path d="M398 104 C399 108 401 110 405 111 C401 112 399 114 398 118 C397 114 395 112 391 111 C395 110 397 108 398 104 Z" fill="#86efac" opacity=".7"/>
+</svg>
