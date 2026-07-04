@@ -1,0 +1,20 @@
+import puppeteer from 'puppeteer-core';
+const CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const b=await puppeteer.launch({executablePath:CHROME,headless:'new',args:['--no-sandbox']});
+const p=await b.newPage(); await p.setViewport({width:1440,height:950,deviceScaleFactor:1.5});
+await p.goto('http://localhost:4321/',{waitUntil:'domcontentloaded'});
+await p.waitForSelector('input[type="text"]',{timeout:15000});
+await p.type('input[type="text"]','demo'); await p.type('input[type="password"]','calvinball123');
+await p.click('button[type="submit"]'); await p.waitForSelector('.persona-av',{timeout:20000});
+await p.evaluate(()=>{const t=[...document.querySelectorAll('.sb-foot .sb-link')].find(l=>/theme/i.test(l.textContent)); t&&t.click();});
+await new Promise(r=>setTimeout(r,400));
+await p.evaluate(()=>window.openCell('dp-brief')); await new Promise(r=>setTimeout(r,700));
+// measure modal-head title color vs bg to confirm contrast
+const c=await p.evaluate(()=>{const t=document.querySelector('.modal-head-title'); const h=document.querySelector('.modal-head'); return {title:getComputedStyle(t).color, headBg:getComputedStyle(h).backgroundColor};});
+console.log('modal head:', JSON.stringify(c));
+await p.screenshot({path:'/tmp/light2-brief.png', clip:{x:180,y:20,width:1600,height:520}});
+await p.evaluate(()=>window.closeModal()); await new Promise(r=>setTimeout(r,300));
+await p.evaluate(()=>window.goTo('dp-consensus')); await new Promise(r=>setTimeout(r,600));
+await p.evaluate(()=>window.scrollTo(0,1100)); await new Promise(r=>setTimeout(r,300));
+await p.screenshot({path:'/tmp/light2-consensus.png'});
+await b.close(); console.log('done');

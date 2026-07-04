@@ -1235,3 +1235,33 @@ input:focus-visible{outline:none}
 
 /* library card banner images (public/banners/*.svg) */
 .lib-banner{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHT THEME CORRECTIONS
+   Fix elements that were hardcoded for dark backgrounds.
+   ═══════════════════════════════════════════════════════════ */
+/* modal header was a hardcoded dark bar → title was dark-on-dark */
+html[data-theme="light"] .modal-head{background:rgba(255,255,255,.94)}
+
+/* bold text inside light panels was white (#fff) → invisible */
+html[data-theme="light"] .insight-text strong,
+html[data-theme="light"] .action-text strong,
+html[data-theme="light"] .ask-msg.ai strong,
+html[data-theme="light"] .retro-text strong,
+html[data-theme="light"] .store-detail-block-val strong,
+html[data-theme="light"] .complete-change strong{color:var(--t-1)}
+
+/* tag/eyebrow accents that sit on LIGHT surfaces (cell header, decision tiles)
+   were pastel colours tuned for dark → darken for readable contrast.
+   (tile-tag / lib-card-tag sit on dark SVG/banner heroes, so they stay pastel.) */
+html[data-theme="light"] .cell-tag.brief,
+html[data-theme="light"] .dtile-tag.brief{color:#b45309;border-color:rgba(180,83,9,.3)}
+html[data-theme="light"] .cell-tag.why,
+html[data-theme="light"] .dtile-tag.why{color:#a21caf;border-color:rgba(162,28,175,.3)}
+html[data-theme="light"] .cell-tag.signal,
+html[data-theme="light"] .dtile-tag.signal{color:#4338ca;border-color:rgba(67,56,202,.3)}
+html[data-theme="light"] .cell-tag.ask{color:#15803d;border-color:rgba(21,128,61,.3)}
+html[data-theme="light"] .cell-tag.brief{background:rgba(180,83,9,.08)}
+html[data-theme="light"] .cell-tag.why{background:rgba(162,28,175,.08)}
+html[data-theme="light"] .cell-tag.signal{background:rgba(67,56,202,.08)}
+html[data-theme="light"] .cell-tag.ask{background:rgba(21,128,61,.08)}
