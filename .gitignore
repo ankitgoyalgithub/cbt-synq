@@ -1,0 +1,11 @@
+.DS_Store
+.claude/
+**/node_modules/
+node_modules/
+**/dist/
+dist/
+.env
+**/.env
+*.local
+frontend/test/out/
+frontend/tsconfig.tsbuildinfo

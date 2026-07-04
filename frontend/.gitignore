@@ -1,0 +1,8 @@
+node_modules
+dist
+test/out
+*.local
+.DS_Store
+npm-debug.log*
+tsconfig.tsbuildinfo
+.env

@@ -1,0 +1,21 @@
+import puppeteer from 'puppeteer-core';
+const CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const b=await puppeteer.launch({executablePath:CHROME,headless:'new',args:['--no-sandbox']});
+const p=await b.newPage(); await p.setViewport({width:1440,height:950,deviceScaleFactor:2});
+const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+await p.goto('http://localhost:4321/',{waitUntil:'domcontentloaded'});
+await p.waitForSelector('input[type="text"]',{timeout:15000});
+await p.type('input[type="text"]','demo'); await p.type('input[type="password"]','calvinball123');
+await p.click('button[type="submit"]'); await p.waitForSelector('.persona-av',{timeout:20000});
+await new Promise(r=>setTimeout(r,500));
+await p.screenshot({path:'/tmp/side-dark.png', clip:{x:0,y:0,width:260,height:950}});
+// toggle theme via sidebar theme link (first sb-foot sb-link)
+const beforeTheme=await p.evaluate(()=>document.documentElement.getAttribute('data-theme'));
+await p.evaluate(()=>{ const links=[...document.querySelectorAll('.sb-foot .sb-link')]; const t=links.find(l=>/theme/i.test(l.textContent)); t&&t.click(); });
+await new Promise(r=>setTimeout(r,500));
+const afterTheme=await p.evaluate(()=>document.documentElement.getAttribute('data-theme'));
+console.log('theme:', beforeTheme, '→', afterTheme);
+await p.setViewport({width:1440,height:950,deviceScaleFactor:1});
+await p.screenshot({path:'/tmp/side-light.png'});
+console.log('errors:', errs.length?errs.join(' | '):'(none)');
+await b.close();

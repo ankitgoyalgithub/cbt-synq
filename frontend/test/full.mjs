@@ -1,0 +1,12 @@
+import puppeteer from 'puppeteer-core';
+const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const browser = await puppeteer.launch({ executablePath: CHROME, headless: 'new', args: ['--no-sandbox'] });
+const page = await browser.newPage();
+await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
+await page.goto('http://localhost:4321/', { waitUntil: 'domcontentloaded' });
+await page.waitForSelector('input[type="text"]', { timeout: 15000 });
+await page.type('input[type="text"]', 'demo'); await page.type('input[type="password"]', 'calvinball123');
+await page.click('button[type="submit"]'); await page.waitForSelector('.persona-pill', { timeout: 20000 });
+await new Promise(r=>setTimeout(r,600));
+await page.screenshot({ path: '/tmp/full-cockpit.png', fullPage: true });
+await browser.close(); console.log('done');

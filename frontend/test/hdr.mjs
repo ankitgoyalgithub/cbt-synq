@@ -1,0 +1,16 @@
+import puppeteer from 'puppeteer-core';
+const CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const b=await puppeteer.launch({executablePath:CHROME,headless:'new',args:['--no-sandbox']});
+const p=await b.newPage(); await p.setViewport({width:1440,height:950,deviceScaleFactor:2});
+await p.goto('http://localhost:4321/',{waitUntil:'domcontentloaded'});
+await p.waitForSelector('input[type="text"]',{timeout:15000});
+await p.type('input[type="text"]','demo'); await p.type('input[type="password"]','calvinball123');
+await p.click('button[type="submit"]'); await p.waitForSelector('.persona-pill,.persona-av',{timeout:20000});
+await new Promise(r=>setTimeout(r,600));
+const dp=await p.evaluate(()=>document.querySelector('.persona-switch-name')?.textContent);
+console.log('default persona name:', dp);
+// header crop (top-right)
+await p.screenshot({path:'/tmp/hdr-full.png', clip:{x:900,y:0,width:1440-900,height:120}});
+// sidebar crop
+await p.screenshot({path:'/tmp/hdr-sidebar.png', clip:{x:0,y:0,width:280,height:950}});
+await b.close();

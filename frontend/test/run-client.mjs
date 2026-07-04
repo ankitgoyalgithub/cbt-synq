@@ -1,0 +1,15 @@
+import { JSDOM } from 'jsdom';
+const dom = new JSDOM('<!doctype html><html><head></head><body><div id="root"></div></body></html>', { url: 'http://localhost/', pretendToBeVisual: true });
+globalThis.window = dom.window;
+globalThis.document = dom.window.document;
+globalThis.localStorage = dom.window.localStorage;
+globalThis.HTMLElement = dom.window.HTMLElement;
+globalThis.Element = dom.window.Element;
+globalThis.Node = dom.window.Node;
+globalThis.getComputedStyle = dom.window.getComputedStyle;
+globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+dom.window.scrollTo = () => {};
+dom.window.HTMLElement.prototype.scrollIntoView = () => {};
+globalThis.requestAnimationFrame = (cb) => setTimeout(() => cb(Date.now()), 0);
+globalThis.cancelAnimationFrame = (id) => clearTimeout(id);
+await import('./out/client.mjs');
