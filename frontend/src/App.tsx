@@ -5,7 +5,6 @@ import AppHeader from './components/AppHeader';
 import Sidebar from './components/Sidebar';
 import PersonaMain from './components/PersonaMain';
 import AskWidget from './components/AskWidget';
-import Modal from './components/Modal';
 import Toasts from './components/Toasts';
 
 function Shell() {
@@ -30,7 +29,6 @@ function Shell() {
         </button>
       </div>
       <AskWidget />
-      <Modal />
       <Toasts />
     </>
   );

@@ -1107,10 +1107,32 @@ input:focus-visible{outline:none}
 .fsview-actions{display:flex;gap:8px}
 .fsview-actions .btn{font-size:12px;padding:9px 15px}
 
+/* ── Unified detail screen (all tiles + library cards open here) ── */
+.screen{animation:fsIn .22s ease}
+.screen-head{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.screen-back{flex:none;width:38px;height:38px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border);display:grid;place-items:center;color:var(--t-2);cursor:pointer;transition:all var(--dur)}
+.screen-back:hover{background:var(--bg-3);color:var(--t-1);border-color:var(--p-3);transform:translateX(-1px)}
+.screen-back:active{transform:translateX(-1px) scale(.95)}
+.screen-back svg{display:block}
+.screen-head-text{flex:1;min-width:0}
+.screen-eyebrow{font-size:11px;color:var(--p-1);font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-bottom:4px}
+.screen-title{font-family:var(--display);font-size:25px;font-weight:400;color:var(--t-1);letter-spacing:-.01em;line-height:1.15}
+.screen-title em,.screen-title strong{color:var(--p-1);font-style:normal;font-weight:500}
+.screen-actions{display:flex;gap:8px;flex:none}
+.screen-actions .btn{font-size:12px;padding:9px 15px}
+.screen-body{animation:fsIn .28s ease}
+@media (max-width:760px){
+  .screen-actions{display:none}
+  .screen-title{font-size:19px}
+  .screen-head{gap:11px;margin-bottom:18px}
+}
+
 .vtoolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-.vselect{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;background:var(--bg-2);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--t-2);font-family:var(--mono);cursor:pointer;transition:all var(--dur)}
-.vselect:hover{border-color:var(--p-3)}
-.vselect .vsel-lbl{color:var(--t-4);font-size:10px;text-transform:uppercase;letter-spacing:.05em}
+.vselect{display:inline-flex;align-items:center;gap:8px;padding:6px 10px 6px 12px;background:var(--bg-2);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--t-2);font-family:var(--mono);cursor:pointer;transition:all var(--dur)}
+.vselect:hover,.vselect:focus-within{border-color:var(--p-3)}
+.vselect .vsel-lbl{color:var(--t-4);font-size:10px;text-transform:uppercase;letter-spacing:.05em;pointer-events:none}
+.vselect select{appearance:none;-webkit-appearance:none;background:transparent url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none'><path d='M6 9l6 6 6-6' stroke='%236b6b78' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 2px center;border:0;outline:none;padding:2px 18px 2px 0;color:var(--t-1);font-size:12px;font-family:var(--mono);font-weight:500;cursor:pointer}
+.vselect select option{background:var(--bg-2);color:var(--t-1)}
 .vselect .vsel-caret{color:var(--t-4);font-size:9px}
 .vsearch{flex:1;min-width:180px;display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--bg-2);border:1px solid var(--border);border-radius:8px}
 .vsearch input{flex:1;background:none;border:0;outline:none;color:var(--t-1);font-size:13px;font-family:inherit}

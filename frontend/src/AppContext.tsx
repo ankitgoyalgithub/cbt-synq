@@ -30,6 +30,7 @@ interface AppCtx {
   closeView: () => void;
   goTo: (id: string) => void;
   closeModal: () => void;
+  closeDetail: () => void;
   toggleAsk: () => void;
   closeAsk: () => void;
   approveAction: (label: string) => void;
@@ -92,38 +93,44 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // ── Journey ────────────────────────────────────────────
   const updateJourney = useCallback(() => setStepState(state.step), []);
 
-  // ── Modal / cells ──────────────────────────────────────
+  const scrollTop = () => {
+    const el = document.getElementById('appMain');
+    if (el) el.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+  };
+
+  // ── Detail drill-down (cells + views share one full-screen surface) ──
   const openCell = useCallback((cellId: string) => {
     state.currentCell = cellId;
+    state.currentView = null;
     setCurrentCellState(cellId);
+    setCurrentViewState(null);
     if (cellId.includes('brief')) state.step = 1;
     else if (cellId.includes('why')) state.step = 2;
     else if (cellId.includes('signal')) state.step = 3;
     setStepState(state.step);
-    document.body.style.overflow = 'hidden';
+    scrollTop();
   }, []);
 
-  const closeModal = useCallback(() => {
-    state.currentCell = null;
-    setCurrentCellState(null);
-    document.body.style.overflow = '';
-  }, []);
-
-  // ── Full-screen views (Forecast Viewer / Consensus Workbook) ──
   const openView = useCallback((id: string) => {
     if (!VIEWS[id]) return;
     state.currentView = id;
     state.currentCell = null;
     setCurrentViewState(id);
     setCurrentCellState(null);
-    document.body.style.overflow = '';
-    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+    scrollTop();
   }, []);
-  const closeView = useCallback(() => {
+
+  const closeDetail = useCallback(() => {
+    state.currentCell = null;
     state.currentView = null;
+    setCurrentCellState(null);
     setCurrentViewState(null);
-    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+    document.body.style.overflow = '';
+    scrollTop();
   }, []);
+  const closeModal = closeDetail;
+  const closeView = closeDetail;
 
   // ── Persona switching ──────────────────────────────────
   const switchPersona = useCallback((key: string) => {
@@ -191,12 +198,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   // ── Unified nav router (sidebar + library) ─────────────
   const goTo = useCallback((id: string) => {
-    if (id === 'home') { if (state.currentView) closeView(); else navHome(); return; }
+    if (id === 'home') { if (state.currentView || state.currentCell) closeDetail(); else navHome(); return; }
     if (VIEWS[id]) { openView(id); return; }
-    if (id.endsWith('-ask')) { if (state.currentView) closeView(); toggleAsk(); return; }
-    if (state.currentView) closeView();
+    if (id.endsWith('-ask')) { closeDetail(); toggleAsk(); return; }
     openCell(id);
-  }, [closeView, navHome, openView, openCell, toggleAsk]);
+  }, [closeDetail, navHome, openView, openCell, toggleAsk]);
 
   const askSubmit = useCallback((raw: string) => {
     const q = raw.trim();
@@ -224,7 +230,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const apiRef = useRef<AppCtx>(null as unknown as AppCtx);
   const api: AppCtx = {
     persona, step, currentCell, currentView, theme, askOpen, toasts, askMessages, sidebarCollapsed,
-    switchPersona, navHome, drillStat, drillMini, gotoStep, openCell, openView, closeView, goTo, closeModal,
+    switchPersona, navHome, drillStat, drillMini, gotoStep, openCell, openView, closeView, goTo, closeModal, closeDetail,
     toggleAsk, closeAsk, approveAction, toggleTheme, toggleSidebar, pushToast, askSubmit, askSugg,
   };
   apiRef.current = api;
@@ -239,9 +245,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     Object.assign(window as any, {
       openCell: (id: string) => apiRef.current.openCell(id),
       openView: (id: string) => apiRef.current.openView(id),
-      closeView: () => apiRef.current.closeView(),
+      closeView: () => apiRef.current.closeDetail(),
+      closeDetail: () => apiRef.current.closeDetail(),
       goTo: (id: string) => apiRef.current.goTo(id),
-      closeModal: () => apiRef.current.closeModal(),
+      closeModal: () => apiRef.current.closeDetail(),
       switchPersona: (k: string) => apiRef.current.switchPersona(k),
       navHome: () => apiRef.current.navHome(),
       drillStat: (p: string, c: string) => apiRef.current.drillStat(p, c),
@@ -266,7 +273,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if ((e.target as HTMLElement)?.tagName === 'INPUT') return;
       const map: Record<string, string> = { '1': 'csco', '2': 'dp', '3': 'inv', '4': 'qcomm' };
       if (map[e.key]) apiRef.current.switchPersona(map[e.key]);
-      if (e.key === 'Escape') { apiRef.current.closeModal(); apiRef.current.closeAsk(); }
+      if (e.key === 'Escape') { apiRef.current.closeDetail(); apiRef.current.closeAsk(); }
     };
     document.addEventListener('keydown', handler);
     return () => document.removeEventListener('keydown', handler);

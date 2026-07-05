@@ -600,7 +600,7 @@ function radarApprove(){
    ═══════════════════════════════════════════════════════════ */
 function showWorkflowComplete(opts){
   // Remove any prior completion panels in this modal
-  document.querySelectorAll('.modal-body .complete').forEach(el=>el.remove());
+  document.querySelectorAll('.screen-body .complete').forEach(el=>el.remove());
   const panel = document.createElement('div');
   panel.className = 'complete show';
   panel.innerHTML = `
@@ -647,7 +647,7 @@ function showWorkflowComplete(opts){
     ` : ''}
   `;
   // Insert after action box, or at end of modal body
-  const body = document.querySelector('.modal-body');
+  const body = document.querySelector('.screen-body');
   const action = body && body.querySelector('.action');
   if (action) action.parentNode.insertBefore(panel, action.nextSibling);
   else if (body) body.appendChild(panel);
@@ -1011,21 +1011,60 @@ function qcApprove(){
 }
 
 
-/* Consensus Workbook / Forecast Viewer search helpers (v0.9) */
-function wbSearch(q) {
-  q = (q || '').toLowerCase().trim();
-  document.querySelectorAll('#wbBody .wb-row').forEach(function (r: any) {
-    r.style.display = (!q || r.textContent.toLowerCase().indexOf(q) > -1) ? '' : 'none';
+/* Consensus Workbook / Forecast Viewer filters (v0.9) —
+   category / channel / location selects combine with the free-text search.
+   Empty category headers hide themselves so groups don't leave orphan labels. */
+function val(id) { const el: any = document.getElementById(id); return el ? el.value : 'all'; }
+
+function fvFilter() {
+  const body = document.getElementById('fvtBody'); if (!body) return;
+  const cat = val('fvCat'), ch = val('fvCh');
+  const q = ((document.getElementById('fvSearch') as any)?.value || '').toLowerCase().trim();
+  let header: any = null, headerCount = 0, shown = 0;
+  const flush = () => { if (header) header.style.display = headerCount ? '' : 'none'; };
+  Array.prototype.forEach.call(body.children, function (el: any) {
+    if (el.classList.contains('fv-cat-row')) { flush(); header = el; headerCount = 0; return; }
+    if (!el.classList.contains('fvt-row')) return;
+    const rowCat = header ? header.textContent.split('·')[0].trim() : '';
+    const chCell = el.querySelector('.fvt-num');
+    const rowCh = chCell ? chCell.textContent.trim() : '';
+    const ok = (cat === 'all' || rowCat === cat)
+      && (ch === 'all' || rowCh === ch)
+      && (!q || el.textContent.toLowerCase().indexOf(q) > -1);
+    el.style.display = ok ? '' : 'none';
+    if (ok) { shown++; headerCount++; }
   });
-}
-function fvSearch(q) {
-  q = (q || '').toLowerCase().trim(); let shown = 0;
-  document.querySelectorAll('#fvtBody .fvt-row').forEach(function (r: any) {
-    const ok = (!q || r.textContent.toLowerCase().indexOf(q) > -1);
-    r.style.display = ok ? '' : 'none'; if (ok) shown++;
-  });
+  flush();
   const e = document.getElementById('fvtEmpty'); if (e) e.style.display = shown ? 'none' : 'block';
+  const c = document.getElementById('fvtCount'); if (c) c.textContent = shown + ' of 184 shown';
 }
+
+function wbFilter() {
+  const body = document.getElementById('wbBody'); if (!body) return;
+  const cat = val('wbCat'), dc = val('wbDc'), ch = val('wbCh');
+  const q = ((document.getElementById('wbSearch') as any)?.value || '').toLowerCase().trim();
+  let header: any = null, headerCount = 0;
+  const flush = () => { if (header) header.style.display = headerCount ? '' : 'none'; };
+  Array.prototype.forEach.call(body.children, function (el: any) {
+    if (el.classList.contains('fv-cat-row')) { flush(); header = el; headerCount = 0; return; }
+    if (!el.classList.contains('wb-row')) return;
+    const rowCat = header ? header.textContent.split('·')[0].trim() : '';
+    const sub = el.querySelector('.wb-sub');
+    const parts = sub ? sub.textContent.split('·').map((s: string) => s.trim()) : [];
+    const rowDc = parts[0] || '', rowCh = parts[1] || '';
+    const ok = (cat === 'all' || rowCat === cat)
+      && (dc === 'all' || rowDc === dc)
+      && (ch === 'all' || rowCh === ch)
+      && (!q || el.textContent.toLowerCase().indexOf(q) > -1);
+    el.style.display = ok ? '' : 'none';
+    if (ok) headerCount++;
+  });
+  flush();
+}
+
+/* search inputs keep their old handler name but now route through the combined filter */
+function fvSearch() { fvFilter(); }
+function wbSearch() { wbFilter(); }
 
 /* expose engine functions on window so inline onclick handlers in injected HTML resolve */
 Object.assign(window as any, {
@@ -1036,9 +1075,9 @@ Object.assign(window as any, {
   showWorkflowComplete, pushAction,
   qcRender, qcUpdateMetrics, qcMode, qcSelectStore, refillAdjust,
   qcPlayToggle, qcFireOrderPulse, qcStartLoops, qcStopLoops, qcApprove,
-  wbToggle, wbCount, wbStage, wbSearch, fvSearch,
+  wbToggle, wbCount, wbStage, wbSearch, fvSearch, fvFilter, wbFilter,
 });
-export { wbCount };
+export { wbCount, fvFilter, wbFilter };
 
 /* Cell init helpers — called by the React modal once a flagship cell's HTML is mounted.
    Mirrors the setTimeout(...) initializers from the original openCell wrappers. */

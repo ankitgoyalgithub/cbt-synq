@@ -1,16 +1,16 @@
 import { useApp } from '../AppContext';
 import { PERSONAS } from '../data/personas';
 import { HERO_TILES, LIBRARY } from '../data/content';
-import FullScreenView from './FullScreenView';
+import DetailScreen from './DetailScreen';
 
 const html = (s: string) => ({ __html: s });
 
 export default function PersonaMain() {
-  const { persona, currentView, toggleAsk, openCell, drillStat, drillMini } = useApp();
+  const { persona, currentCell, currentView, toggleAsk, openCell, drillStat, drillMini } = useApp();
   const p = PERSONAS[persona];
 
-  // full-screen views (Forecast Viewer / Consensus Workbook) replace the persona canvas
-  if (currentView) return <FullScreenView />;
+  // any drill-down (cell or view) opens as a consistent full-screen page
+  if (currentCell || currentView) return <DetailScreen />;
 
   return (
     <>
