@@ -4,11 +4,9 @@ import { SB_NAV } from '../data/personas';
 
 export default function Sidebar() {
   const { persona, currentCell, currentView, goTo, theme, toggleTheme, sidebarCollapsed } = useApp();
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const collapsed = sidebarCollapsed;
   const nav = SB_NAV[persona] || [];
-  const username = user?.getUsername?.() || '';
-  const initial = (username || 'U').charAt(0).toUpperCase();
 
   return (
     <aside className={`sidebar${collapsed ? ' collapsed' : ''}`} id="sidebar">
@@ -31,11 +29,6 @@ export default function Sidebar() {
       </nav>
 
       <div className="sb-foot">
-        <div className="sb-profile">
-          <div className="sb-avatar-user" title={username ? `Signed in as ${username}` : 'Account'} aria-label={username}>
-            {initial}
-          </div>
-        </div>
         <div className="sb-link" onClick={toggleTheme} title={theme === 'light' ? 'Switch to dark' : 'Switch to light'}>
           <span className="sb-link-icon">{theme === 'light' ? '☾' : '◐'}</span>
           <span className="sb-link-text">{theme === 'light' ? 'Dark theme' : 'Light theme'}</span>
