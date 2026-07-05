@@ -7,9 +7,17 @@ export default function Sidebar() {
   const { user, logout } = useAuth();
   const collapsed = sidebarCollapsed;
   const nav = SB_NAV[persona] || [];
+  const username = user?.getUsername?.() || '';
+  const initial = (username || 'U').charAt(0).toUpperCase();
 
   return (
     <aside className={`sidebar${collapsed ? ' collapsed' : ''}`} id="sidebar">
+      <div className="sb-profile">
+        <div className="sb-avatar-user" title={username ? `Signed in as ${username}` : 'Account'} aria-label={username}>
+          {initial}
+        </div>
+      </div>
+
       <nav className="sb-section sb-nav">
         {nav.map((n: any) => {
           const isActive = currentCell === n.id || currentView === n.id
@@ -33,17 +41,12 @@ export default function Sidebar() {
           <span className="sb-link-icon">{theme === 'light' ? '☾' : '◐'}</span>
           <span className="sb-link-text">{theme === 'light' ? 'Dark theme' : 'Light theme'}</span>
         </div>
-        <div className="sb-link" onClick={() => { void logout(); }} title="Log Out">
-          <span className="sb-link-icon">⤓</span><span className="sb-link-text">Log Out</span>
-        </div>
         <div className="sb-link" title="User Guide">
           <span className="sb-link-icon">?</span><span className="sb-link-text">User Guide</span>
         </div>
-        {user && !collapsed && (
-          <div className="sb-user" title={`Signed in as ${user.getUsername?.() || ''}`}>
-            <span className="live-dot" />Signed in as&nbsp;<strong>{user.getUsername?.() || 'user'}</strong>
-          </div>
-        )}
+        <div className="sb-link sb-logout" onClick={() => { void logout(); }} title="Log Out">
+          <span className="sb-link-icon">⤓</span><span className="sb-link-text">Log Out</span>
+        </div>
       </div>
     </aside>
   );

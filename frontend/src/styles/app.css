@@ -1265,3 +1265,12 @@ html[data-theme="light"] .cell-tag.brief{background:rgba(180,83,9,.08)}
 html[data-theme="light"] .cell-tag.why{background:rgba(162,28,175,.08)}
 html[data-theme="light"] .cell-tag.signal{background:rgba(67,56,202,.08)}
 html[data-theme="light"] .cell-tag.ask{background:rgba(21,128,61,.08)}
+
+/* sidebar user profile avatar (top) · logout moved to footer bottom */
+.sb-profile{display:flex;align-items:center;padding:2px 4px 12px;margin-bottom:4px;border-bottom:1px solid var(--border-soft)}
+.sb-avatar-user{width:34px;height:34px;border-radius:50%;background:var(--bg-3);border:1px solid var(--border-2);
+  display:grid;place-items:center;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--t-2);flex-shrink:0}
+.sidebar.collapsed .sb-profile{justify-content:center;padding:2px 0 12px}
+.sb-logout{color:var(--t-2)}
+.sb-logout:hover{color:var(--er)}
+.sb-logout:hover .sb-link-icon{color:var(--er)}
