@@ -44,10 +44,6 @@ export default function Sidebar() {
             <span className="live-dot" />Signed in as&nbsp;<strong>{user.getUsername?.() || 'user'}</strong>
           </div>
         )}
-        <div className="sb-brand">
-          <div className="sb-brand-mark">C</div>
-          <div className="sb-brand-tag">by CalvinBall Technologies</div>
-        </div>
       </div>
     </aside>
   );
