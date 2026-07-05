@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../auth/AuthContext';
 import { authErrorMessage } from '../parse/client';
+import Icon from './Icon';
 
 type Mode = 'login' | 'signup';
 
@@ -35,7 +36,7 @@ export default function LoginPage() {
     <div className="auth-screen">
       <div className="auth-card">
         <div className="auth-brand">
-          <div className="brand-mark">C</div>
+          <div className="brand-mark"><Icon name="brand" size={22} /></div>
           <div className="brand-text">
             <div className="brand-name">CalvinBall <em>Supply Chain Intelligence</em></div>
             <div className="brand-sub">Aurion Consumer Brands · v0.3</div>

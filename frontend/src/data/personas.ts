@@ -50,34 +50,34 @@ const PERSONAS = {
 
 const SB_NAV = {
   csco: [
-    { id:'home',         icon:'⌂', name:'Home',                    tag:'' },
-    { id:'csco-brief',   icon:'◐', name:'Wednesday Canvas',        tag:'Brief' },
-    { id:'csco-why',     icon:'◎', name:'Revenue Waterfall',       tag:'Why' },
-    { id:'csco-signal',  icon:'◭', name:'Event Radar',             tag:'Signal' },
-    { id:'csco-ask',     icon:'✦', name:'Ask CalvinBall',           tag:'Ask' }
+    { id:'home',         icon:'home', name:'Home',                    tag:'' },
+    { id:'csco-brief',   icon:'brief', name:'Wednesday Canvas',        tag:'Brief' },
+    { id:'csco-why',     icon:'why', name:'Revenue Waterfall',       tag:'Why' },
+    { id:'csco-signal',  icon:'signal', name:'Event Radar',             tag:'Signal' },
+    { id:'csco-ask',     icon:'ask', name:'Ask CalvinBall',           tag:'Ask' }
   ],
   dp: [
-    { id:'home',         icon:'⌂', name:'Home',                    tag:'' },
-    { id:'dp-brief',     icon:'◐', name:'Planning Canvas',         tag:'Brief' },
-    { id:'dp-why',       icon:'◎', name:'Variance Decomposer',     tag:'Why' },
-    { id:'dp-signal',    icon:'◭', name:'Signal Stack',            tag:'Signal' },
-    { id:'dp-forecast',  icon:'▤', name:'Forecast Viewer',         tag:'View' },
-    { id:'dp-consensus', icon:'⊞', name:'Consensus Workbook',      tag:'Align' },
-    { id:'dp-ask',       icon:'✦', name:'Ask CalvinBall',           tag:'Ask' }
+    { id:'home',         icon:'home', name:'Home',                    tag:'' },
+    { id:'dp-brief',     icon:'brief', name:'Planning Canvas',         tag:'Brief' },
+    { id:'dp-why',       icon:'why', name:'Variance Decomposer',     tag:'Why' },
+    { id:'dp-signal',    icon:'signal', name:'Signal Stack',            tag:'Signal' },
+    { id:'dp-forecast',  icon:'forecast', name:'Forecast Viewer',         tag:'View' },
+    { id:'dp-consensus', icon:'consensus', name:'Consensus Workbook',      tag:'Align' },
+    { id:'dp-ask',       icon:'ask', name:'Ask CalvinBall',           tag:'Ask' }
   ],
   inv: [
-    { id:'home',         icon:'⌂', name:'Home',                    tag:'' },
-    { id:'inv-brief',    icon:'◐', name:'Risk Tower',              tag:'Brief' },
-    { id:'inv-why',      icon:'◎', name:'East Depot · ₹42L',       tag:'Why' },
-    { id:'inv-signal',   icon:'◭', name:'Rebalance Simulator',     tag:'Signal' },
-    { id:'inv-ask',      icon:'✦', name:'Ask CalvinBall',           tag:'Ask' }
+    { id:'home',         icon:'home', name:'Home',                    tag:'' },
+    { id:'inv-brief',    icon:'brief', name:'Risk Tower',              tag:'Brief' },
+    { id:'inv-why',      icon:'why', name:'East Depot · ₹42L',       tag:'Why' },
+    { id:'inv-signal',   icon:'signal', name:'Rebalance Simulator',     tag:'Signal' },
+    { id:'inv-ask',      icon:'ask', name:'Ask CalvinBall',           tag:'Ask' }
   ],
   qcomm: [
-    { id:'home',         icon:'⌂', name:'Home',                    tag:'' },
-    { id:'qcomm-brief',  icon:'◐', name:'Q-Comm Pulse',            tag:'Brief' },
-    { id:'qcomm-why',    icon:'◎', name:'SLA Decomposer',          tag:'Why' },
-    { id:'qcomm-signal', icon:'◭', name:'Rerouting Simulator',     tag:'Signal' },
-    { id:'qcomm-ask',    icon:'✦', name:'Ask CalvinBall',           tag:'Ask' }
+    { id:'home',         icon:'home', name:'Home',                    tag:'' },
+    { id:'qcomm-brief',  icon:'brief', name:'Q-Comm Pulse',            tag:'Brief' },
+    { id:'qcomm-why',    icon:'why', name:'SLA Decomposer',          tag:'Why' },
+    { id:'qcomm-signal', icon:'signal', name:'Rerouting Simulator',     tag:'Signal' },
+    { id:'qcomm-ask',    icon:'ask', name:'Ask CalvinBall',           tag:'Ask' }
   ]
 };
 

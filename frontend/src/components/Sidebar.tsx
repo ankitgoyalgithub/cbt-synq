@@ -1,6 +1,7 @@
 import { useApp } from '../AppContext';
 import { useAuth } from '../auth/AuthContext';
 import { SB_NAV } from '../data/personas';
+import Icon from './Icon';
 
 export default function Sidebar() {
   const { persona, currentCell, currentView, goTo, theme, toggleTheme, sidebarCollapsed } = useApp();
@@ -21,7 +22,7 @@ export default function Sidebar() {
               onClick={() => goTo(n.id)}
               title={n.name}
             >
-              <span className="sb-link-icon">{n.icon}</span>
+              <span className="sb-link-icon"><Icon name={n.icon} /></span>
               <span className="sb-link-text">{n.name}</span>
             </div>
           );
@@ -30,14 +31,14 @@ export default function Sidebar() {
 
       <div className="sb-foot">
         <div className="sb-link" onClick={toggleTheme} title={theme === 'light' ? 'Switch to dark' : 'Switch to light'}>
-          <span className="sb-link-icon">{theme === 'light' ? '☾' : '◐'}</span>
+          <span className="sb-link-icon"><Icon name={theme === 'light' ? 'moon' : 'sun'} /></span>
           <span className="sb-link-text">{theme === 'light' ? 'Dark theme' : 'Light theme'}</span>
         </div>
         <div className="sb-link" title="User Guide">
-          <span className="sb-link-icon">?</span><span className="sb-link-text">User Guide</span>
+          <span className="sb-link-icon"><Icon name="help" /></span><span className="sb-link-text">User Guide</span>
         </div>
         <div className="sb-link sb-logout" onClick={() => { void logout(); }} title="Log Out">
-          <span className="sb-link-icon">⤓</span><span className="sb-link-text">Log Out</span>
+          <span className="sb-link-icon"><Icon name="logout" /></span><span className="sb-link-text">Log Out</span>
         </div>
       </div>
     </aside>
