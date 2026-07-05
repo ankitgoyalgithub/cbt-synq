@@ -12,12 +12,6 @@ export default function Sidebar() {
 
   return (
     <aside className={`sidebar${collapsed ? ' collapsed' : ''}`} id="sidebar">
-      <div className="sb-profile">
-        <div className="sb-avatar-user" title={username ? `Signed in as ${username}` : 'Account'} aria-label={username}>
-          {initial}
-        </div>
-      </div>
-
       <nav className="sb-section sb-nav">
         {nav.map((n: any) => {
           const isActive = currentCell === n.id || currentView === n.id
@@ -37,6 +31,11 @@ export default function Sidebar() {
       </nav>
 
       <div className="sb-foot">
+        <div className="sb-profile">
+          <div className="sb-avatar-user" title={username ? `Signed in as ${username}` : 'Account'} aria-label={username}>
+            {initial}
+          </div>
+        </div>
         <div className="sb-link" onClick={toggleTheme} title={theme === 'light' ? 'Switch to dark' : 'Switch to light'}>
           <span className="sb-link-icon">{theme === 'light' ? '☾' : '◐'}</span>
           <span className="sb-link-text">{theme === 'light' ? 'Dark theme' : 'Light theme'}</span>
