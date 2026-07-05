@@ -1016,11 +1016,85 @@ function qcApprove(){
    Empty category headers hide themselves so groups don't leave orphan labels. */
 function val(id) { const el: any = document.getElementById(id); return el ? el.value : 'all'; }
 
+/* Forecast Viewer: the chart + KPI cards are driven off the *visible* rows, so
+   changing a filter re-derives accuracy/MAPE/bias/FVA and redraws the demand
+   chart (forecast slope from bias, confidence-band width from accuracy). The
+   pristine portfolio view (all/all) is snapshotted once and restored verbatim. */
+let fvOrig: any = null;
+function fvCapture() {
+  if (fvOrig) return;
+  const c = document.getElementById('fvChartData');
+  const k = document.getElementById('fvKpis');
+  if (c && k) fvOrig = { chart: c.innerHTML, kpis: k.innerHTML };
+}
+function fvRestore() {
+  if (!fvOrig) return;
+  const c = document.getElementById('fvChartData'); if (c) c.innerHTML = fvOrig.chart;
+  const k = document.getElementById('fvKpis'); if (k) k.innerHTML = fvOrig.kpis;
+}
+function fvNum(t) { return parseFloat((t || '').replace('−', '-').replace(/[+%\s]/g, '')) || 0; }
+function fvHash(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+
+function fvDrawChart(acc, bias, seedStr) {
+  const g = document.getElementById('fvChartData'); if (!g) return;
+  let s = fvHash(seedStr || 'all') || 1;
+  const rnd = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
+  const x0 = 60, xNow = 560, x1 = 880, yNow = 158;
+  const hist: any[] = [];
+  for (let i = 0; i < 14; i++) {
+    const t = i / 13;
+    hist.push([x0 + (xNow - x0) * t, 226 - t * (226 - yNow) + (rnd() - 0.5) * 8]);
+  }
+  hist[13] = [xNow, yNow];
+  const slope = Math.max(8, 20 + (-bias) * 4);              // bias correction → forecast rise
+  const bandW = Math.min(36, Math.max(6, (92 - acc) * 1.35 + 6)); // lower accuracy → wider band
+  const enh: any[] = [], base: any[] = [], top: any[] = [], bot: any[] = [];
+  for (let i = 0; i < 8; i++) {
+    const t = i / 7, x = xNow + (x1 - xNow) * t;
+    const ey = yNow - slope * (0.55 * t + 0.45 * t * t);
+    enh.push([x, ey]); base.push([x, yNow - slope * 0.35 * t]);
+    top.push([x, ey - bandW * t]); bot.push([x, ey + bandW * t]);
+  }
+  const P = (a) => a.map((p) => p[0].toFixed(0) + ',' + p[1].toFixed(0)).join(' ');
+  const bandD = 'M ' + top.map((p) => p[0].toFixed(0) + ' ' + p[1].toFixed(0)).join(' L ')
+    + ' L ' + bot.slice().reverse().map((p) => p[0].toFixed(0) + ' ' + p[1].toFixed(0)).join(' L ') + ' Z';
+  const dot = enh[7];
+  g.innerHTML =
+    '<path d="' + bandD + '" fill="rgba(192,132,252,.13)" stroke="rgba(192,132,252,.30)" stroke-width="0.5"/>'
+    + '<line x1="560" y1="40" x2="560" y2="250" stroke="#3d3d46" stroke-width="1" stroke-dasharray="3,3"/>'
+    + '<polyline points="' + P(hist) + '" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'
+    + '<polyline points="' + P(base) + '" fill="none" stroke="#60a5fa" stroke-width="2" stroke-dasharray="5,4" stroke-linecap="round"/>'
+    + '<polyline points="' + P(enh) + '" fill="none" stroke="#c084fc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>'
+    + '<circle cx="' + dot[0].toFixed(0) + '" cy="' + dot[1].toFixed(0) + '" r="3.5" fill="#c084fc"/>';
+}
+
+function fvApply(stats, seed, shown) {
+  if (!stats.length) return;
+  const avg = (k) => stats.reduce((a, b) => a + b[k], 0) / stats.length;
+  const acc = avg('acc'), mape = avg('mape'), bias = avg('bias'), fva = avg('fva');
+  const set = (id, txt) => { const e = document.getElementById(id); if (e) e.textContent = txt; };
+  const cls = (id, c) => { const e = document.getElementById(id); if (e) e.className = c; };
+  set('fvkAcc', Math.round(acc) + '%');
+  set('fvkFva', '+' + Math.round(fva) + ' pts');
+  set('fvkMape', mape.toFixed(1) + '%');
+  set('fvkBias', (bias >= 0 ? '+' : '−') + Math.abs(bias).toFixed(1) + '%');
+  set('fvkVmape', (mape * 1.07).toFixed(1) + '%');
+  const accOk = acc >= 75;
+  cls('fvcAcc', 'kpi ' + (accOk ? 'ok' : 'wn')); cls('fvkAcc', 'kpi-val ' + (accOk ? 'ok' : 'wn'));
+  set('fvkAccD', shown + (shown === 1 ? ' SKU' : ' SKUs') + ' in view · target 75%');
+  const biasOk = Math.abs(bias) < 1;
+  cls('fvcBias', 'kpi ' + (biasOk ? 'ok' : 'wn')); cls('fvkBias', 'kpi-val ' + (biasOk ? 'ok' : 'wn'));
+  set('fvkBiasD', bias < 0 ? 'under-forecast' : 'over-forecast');
+  fvDrawChart(acc, bias, seed);
+}
+
 function fvFilter() {
   const body = document.getElementById('fvtBody'); if (!body) return;
+  fvCapture();
   const cat = val('fvCat'), ch = val('fvCh');
   const q = ((document.getElementById('fvSearch') as any)?.value || '').toLowerCase().trim();
   let header: any = null, headerCount = 0, shown = 0;
+  const stats: any[] = [];
   const flush = () => { if (header) header.style.display = headerCount ? '' : 'none'; };
   Array.prototype.forEach.call(body.children, function (el: any) {
     if (el.classList.contains('fv-cat-row')) { flush(); header = el; headerCount = 0; return; }
@@ -1032,11 +1106,20 @@ function fvFilter() {
       && (ch === 'all' || rowCh === ch)
       && (!q || el.textContent.toLowerCase().indexOf(q) > -1);
     el.style.display = ok ? '' : 'none';
-    if (ok) { shown++; headerCount++; }
+    if (ok) {
+      shown++; headerCount++;
+      const nums = el.querySelectorAll('.fvt-num'); // [channel, accuracy, mape, bias, fva]
+      if (nums.length >= 5) stats.push({
+        acc: fvNum(nums[1].textContent), mape: fvNum(nums[2].textContent),
+        bias: fvNum(nums[3].textContent), fva: fvNum(nums[4].textContent),
+      });
+    }
   });
   flush();
   const e = document.getElementById('fvtEmpty'); if (e) e.style.display = shown ? 'none' : 'block';
   const c = document.getElementById('fvtCount'); if (c) c.textContent = shown + ' of 184 shown';
+  if (shown === 0 || (cat === 'all' && ch === 'all' && !q)) fvRestore();
+  else fvApply(stats, cat + '|' + ch, shown);
 }
 
 function wbFilter() {
